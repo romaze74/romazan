@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Магазин автозапчастей</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f2f2f2}
+.hidden{display:none}
+
+/* NAV */
+nav{
+background:#222;
+padding:14px;
+text-align:center
+}
+nav a{
+color:#fff;
+margin:0 15px;
+font-weight:bold;
+cursor:pointer;
+text-decoration:none;
+font-size:16px;
+}
+
+/* HEADER (ONLY HOME) */
+header{
+position:relative;
+color:#fff;
+height:400px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:url('https://images.unsplash.com/photo-1613214149922-f1809c99b414') center/cover no-repeat;
+background-size:cover;
+}
+header::after{
+content:"";
+position:absolute;
+top:0; left:0; right:0; bottom:0;
+background:rgba(0,0,0,0.6); /* затемнение */
+z-index:1;
+}
+header h1, header p{
+position:relative;
+z-index:2;
+margin:5px 0;
+text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+header h1{font-size:48px;font-weight:bold}
+header p{font-size:22px}
+
+/* COMMON */
+.container{padding:20px}
+
+/* HERO BOX UNDER HEADER */
+.hero-box{
+background:#fff;
+margin-top:-35px;
+padding:30px;
+border-radius:14px;
+text-align:center
+}
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-top:25px
+}
+.feature{
+background:#fff;
+padding:20px;
+border-radius:10px;
+text-align:center;
+font-weight:bold
+}
+
+/* SEARCH */
+.search{
+display:flex;
+gap:10px;
+margin-bottom:20px
+}
+.search input{
+flex:1;
+padding:10px;
+font-size:16px
+}
+
+/* PRODUCTS */
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px
+}
+.card{
+background:#fff;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.15);
+text-align:center
+}
+.card img{
+width:100%;
+height:160px;
+object-fit:cover;
+border-radius:8px
+}
+.price{color:green;font-weight:bold;font-size:18px}
+
+/* BUTTON */
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+background:#1e8f3a;
+color:#fff;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:16px
+}
+
+/* CART */
+.cart{
+position:fixed;
+right:0;
+top:0;
+width:300px;
+height:100%;
+background:#fff;
+box-shadow:-2px 0 5px rgba(0,0,0,.3);
+padding:15px;
+display:none;
+overflow:auto;
+z-index:10
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:20
+}
+.modal-content{
+background:#fff;
+padding:20px;
+width:90%;
+max-width:400px;
+border-radius:10px;
+text-align:center
+}
+
+/* CONTACTS */
+.contacts{
+background:#fff;
+padding:30px;
+border-radius:12px;
+max-width:600px;
+margin:auto;
+text-align:center;
+font-size:18px
+}
+
+/* FOOTER */
+footer {
+  position: relative;
+  background: #1a1815;
+  color: #bbb;
+  padding: 40px 20px 60px 20px;
+  font-size: 14px;
+  overflow: hidden;
+  margin-top: 40px;
+}
+footer::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('f39877a4-a7a9-472c-8e86-07a064793bee.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.07;
+  width: 100%;
+  height: 150px;
+  z-index: 0;
+  pointer-events: none;
+  filter: brightness(1) contrast(0.6);
+}
+footer .footer-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+  font-size: 15px;
+}
+footer .footer-section {
+  flex: 1 1 250px;
+}
+footer h3 {
+  color: white;
+  margin-bottom: 15px;
+}
+footer a {
+  color: #bbb;
+  text-decoration: none;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+footer p {
+  margin: 5px 0;
+}
+@media(max-width:600px){
+footer .footer-content {
+  flex-direction: column;
+}
+footer .footer-section {
+  flex: none;
+  width: 100%;
+  margin-bottom: 20px;
+}
+}
+
+/* MOBILE */
+@media(max-width:600px){
+nav a{display:block;margin:10px 0}
+header h1{font-size:36px}
+header p{font-size:18px}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a onclick="showPage('home')">Главная</a>
+<a onclick="showPage('catalog')">Каталог</a>
+<a onclick="showPage('contacts')">Контакты</a>
+<a onclick="toggleCart()">🛒 Корзина</a>
+</nav>
+
+<!-- HEADER ONLY HOME -->
+<header id="homeHeader">
+<h1>Магазин автозапчастей</h1>
+<p>Подбор • Продажа • Доставка по Казахстану</p>
+<p>🚗 Все марки • 🛠 Гарантия • 📦 Быстро</p>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home">
+<div class="hero-box">
+<h2>Надёжный сервис автозапчастей</h2>
+<p>
+Большой выбор автозапчастей для легковых и грузовых автомобилей.
+Оригинальные детали и качественные аналоги по честным ценам.
+</p>
+</div>
+
+<div class="features">
+<div class="feature">✅ Гарантия качества</div>
+<div class="feature">💰 Честные цены</div>
+<div class="feature">📦 Быстрая доставка</div>
+<div class="feature">☎ Консультация специалистов</div>
+</div>
+</div>
+
+<!-- CATALOG -->
+<div id="catalog" class="hidden">
+
+<div class="search">
+<input id="search" placeholder="Поиск товара..." oninput="renderProducts()">
+<input id="maxPrice" type="number" placeholder="Цена до" oninput="renderProducts()">
+</div>
+
+<div class="products" id="products"></div>
+</div>
+
+<!-- CONTACTS -->
+<div id="contacts" class="hidden">
+<div class="contacts">
+<h2>Контакты</h2>
+<p>📞 +7 (777) 123-45-67</p>
+<p>✉ info@autoparts.kz</p>
+<p>📍 г. Алматы, ул. Автозапчастей, 10</p>
+<p>🕘 Пн-Сб: 9:00 – 19:00</p>
+</div>
+</div>
+
+</div>
+
+<!-- CART -->
+<div class="cart" id="cart">
+<h3>Корзина</h3>
+<div id="cartItems"></div>
+<button onclick="orderWhatsApp()">📲 Заказать в WhatsApp</button>
+<button onclick="payOnline()">💳 Онлайн-оплата</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3 id="modalTitle"></h3>
+<p id="modalPrice"></p>
+<button onclick="addToCart()">Добавить в корзину</button>
+<button onclick="closeModal()">Закрыть</button>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>PANDÖRA</h3>
+      <p>📍 Найти магазин</p>
+      <p>💬 Написать сообщение</p>
+    </div>
+    <div class="footer-section">
+      <h3>Информация</h3>
+      <p><a href="#">О компании</a></p>
+      <p><a href="#">Магазины</a></p>
+      <p><a href="#">Публичная оферта</a></p>
+      <p><a href="#">Политика конфиденциальности</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>Сервис</h3>
+      <p><a href="#">Доставка</a></p>
+      <p><a href="#">Оплата</a></p>
+      <p><a href="#">Возвраты / Гарантия</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>Помощь</h3>
+      <p><a href="#">Вопрос-ответ</a></p>
+      <p><a href="#">Таблица размеров</a></p>
+      <p><a href="#">Хранение и уход</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+let products=[
+{name:'Тормозные колодки',price:15000,img:'Снимок.PNG'},
+{name:'Аккумулятор',price:42000,img:'https://avatars.mds.yandex.net/i?id=8231ec4fb7db0111866acc53dc9098209c22ca5f-9271150-images-thumbs&n=13'},
+{name:'Масляный фильтр',price:3500,img:'https://avatars.mds.yandex.net/i?id=2509796fa8e53eff7c6d10ea1f36e7f123f14951-9215608-images-thumbs&n=13'},
+{name:'Свечи зажигания',price:6000,img:'https://thumbs.dreamstime.com/b/fyra-isolerade-proppsparkwhite-25198535.jpg'},
+{name:'Амортизатор',price:22000,img:'https://static.tildacdn.com/tild6238-3534-4334-b739-313838383634/_.jpg'},
+{name:'Фара передняя',price:28000,img:'https://ir.ozone.ru/s3/multimedia-1-g/8150137612.jpg'},
+{name:'Воздушный фильтр',price:4200,img:'https://avatars.mds.yandex.net/i?id=2d72f6d9a3b636a85eb89df93facc41803ed95ad-5352587-images-thumbs&n=13'},
+{name:'Ремень ГРМ',price:12500,img:'https://avatars.mds.yandex.net/get-mpic/5253116/img_id3680789257909635024.jpeg/orig'},
+
+{name:'Радиатор охлаждения',price:32000,img:'https://st33.stpulscen.ru/images/product/597/577/787_original.jpg'},
+{name:'Топливный фильтр',price:4800,img:'https://avatars.mds.yandex.net/get-mpic/15176965/2a000001967a47466e1ea8b00ded055ef22b/orig'},
+{name:'Стартер',price:18000,img:'https://crm.podzamenu.ru/product/image/495601?wm=&warranty=&border=&backgroud=&is_sale=&is_stock='},
+{name:'Генератор',price:25000,img:'https://w7.pngwing.com/pngs/810/656/png-transparent-alternators-and-starter-motors-robert-bosch-gmbh-ampere-others-angle-electrical-wires-cable-car.png'},
+{name:'Подшипник ступицы',price:9000,img:'https://avatars.mds.yandex.net/get-mpic/5234464/img_id502272623833992160.jpeg/orig'},
+{name:'Клапан EGR',price:7000,img:'https://a.d-cd.net/tlTC_UXzXTgqf9yD7g2SKAY9r48-960.jpg'},
+{name:'Шаровая опора',price:5500,img:'https://avatars.mds.yandex.net/i?id=3a1938ae72aee1d14c3dc7d1c5c3be691476d887-5226766-images-thumbs&n=13'},
+{name:'Сальник коленвала',price:6500,img:'https://avatars.mds.yandex.net/get-mpic/4948493/2a0000018b0052a4318366c96a3dedb55ae7/orig'},
+{name:'Цилиндр тормозной',price:11000,img:'https://images.nizhparts.ru/images/catalog/50009404.jpg?1637301464'},
+{name:'Рычаг подвески',price:7500,img:'https://avatars.mds.yandex.net/i?id=3ccb36190295e26499eb8fc58470a9dd_l-4076581-images-thumbs&n=13'},
+{name:'Топливный насос',price:13500,img:'https://main-cdn.sbermegamarket.ru/big1/hlr-system/1748262/100023811791b0.jpg'},
+{name:'Пружина подвески',price:6000,img:'https://avatars.mds.yandex.net/i?id=91b1e0c984f2fdb204f3df345a9f124dd0b51bdd-3826599-images-thumbs&n=13'},
+{name:'Кожух ремня ГРМ',price:4200,img:'https://avatars.mds.yandex.net/get-mpic/6340948/2a000001928b43c4d5ad4a3f05ada1e4e330/orig'},
+{name:'Лямбда-зонд',price:8900,img:'https://avatars.mds.yandex.net/get-mpic/14331733/2a00000198249a09baa7398efa1b870dd53b/orig'}
+];
+
+let cart=[],current=null;
+
+function showPage(p){
+['home','catalog','contacts'].forEach(id=>{
+document.getElementById(id).classList.add('hidden');
+});
+document.getElementById(p).classList.remove('hidden');
+document.getElementById('homeHeader').style.display = (p==='home') ? 'flex' : 'none';
+}
+
+function renderProducts(){
+let productsBox=document.getElementById('products');
+productsBox.innerHTML='';
+let q=document.getElementById('search').value.toLowerCase();
+let max=document.getElementById('maxPrice').value||Infinity;
+
+products.filter(p=>p.name.toLowerCase().includes(q)&&p.price<=max)
+.forEach(p=>{
+productsBox.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p class="price">${p.price} ₸</p>
+<button onclick="openModal('${p.name}',${p.price})">Купить</button>
+</div>`;
+});
+}
+renderProducts();
+
+function openModal(n,p){
+current={name:n,price:p};
+document.getElementById('modal').style.display='flex';
+document.getElementById('modalTitle').innerText=n;
+document.getElementById('modalPrice').innerText=p+' ₸';
+}
+function closeModal(){document.getElementById('modal').style.display='none'}
+
+function addToCart(){
+cart.push(current);
+renderCart();
+closeModal();
+}
+
+function renderCart(){
+let cartItems=document.getElementById('cartItems');
+cartItems.innerHTML='';
+cart.forEach(c=>{
+cartItems.innerHTML+=`<p>${c.name} — ${c.price} ₸</p>`;
+});
+}
+
+function toggleCart(){
+let c=document.getElementById('cart');
+c.style.display = (c.style.display==='block')?'none':'block';
+}
+
+function orderWhatsApp(){
+let text=cart.map(c=>c.name+' '+c.price+'₸').join('%0A');
+window.open('https://wa.me/77771234567?text=Заказ:%0A'+text);
+}
+
+function payOnline(){
+alert('Онлайн-оплата подключается через Kaspi / Stripe / PayPal (нужен сервер)');
+}
+</script>
+
+</body>
+</html>
