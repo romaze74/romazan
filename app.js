@@ -1,8 +1,7 @@
 js/app.js
 
-/* ========== DATA ========== */
-const products = [
-  { name: 'Тормозные колодки',   price: 15000, img: 'img/brake-pads.jpg' },
+var products = [
+  { name: 'Тормозные колодки',   price: 15000, img: 'https://avatars.mds.yandex.net/i?id=8231ec4fb7db0111866acc53dc9098209c22ca5f-9271150-images-thumbs&n=13' },
   { name: 'Аккумулятор',         price: 42000, img: 'https://avatars.mds.yandex.net/i?id=8231ec4fb7db0111866acc53dc9098209c22ca5f-9271150-images-thumbs&n=13' },
   { name: 'Масляный фильтр',     price:  3500, img: 'https://avatars.mds.yandex.net/i?id=2509796fa8e53eff7c6d10ea1f36e7f123f14951-9215608-images-thumbs&n=13' },
   { name: 'Свечи зажигания',     price:  6000, img: 'https://thumbs.dreamstime.com/b/fyra-isolerade-proppsparkwhite-25198535.jpg' },
@@ -12,13 +11,13 @@ const products = [
   { name: 'Ремень ГРМ',          price: 12500, img: 'https://avatars.mds.yandex.net/get-mpic/5253116/img_id3680789257909635024.jpeg/orig' },
   { name: 'Радиатор охлаждения', price: 32000, img: 'https://st33.stpulscen.ru/images/product/597/577/787_original.jpg' },
   { name: 'Топливный фильтр',    price:  4800, img: 'https://avatars.mds.yandex.net/get-mpic/15176965/2a000001967a47466e1ea8b00ded055ef22b/orig' },
-  { name: 'Стартер',             price: 18000, img: 'https://crm.podzamenu.ru/product/image/495601?wm=&warranty=&border=&backgroud=&is_sale=&is_stock=' },
+  { name: 'Стартер',             price: 18000, img: 'https://crm.podzamenu.ru/product/image/495601' },
   { name: 'Генератор',           price: 25000, img: 'https://w7.pngwing.com/pngs/810/656/png-transparent-alternators-and-starter-motors-robert-bosch-gmbh-ampere-others-angle-electrical-wires-cable-car.png' },
   { name: 'Подшипник ступицы',   price:  9000, img: 'https://avatars.mds.yandex.net/get-mpic/5234464/img_id502272623833992160.jpeg/orig' },
   { name: 'Клапан EGR',          price:  7000, img: 'https://a.d-cd.net/tlTC_UXzXTgqf9yD7g2SKAY9r48-960.jpg' },
   { name: 'Шаровая опора',       price:  5500, img: 'https://avatars.mds.yandex.net/i?id=3a1938ae72aee1d14c3dc7d1c5c3be691476d887-5226766-images-thumbs&n=13' },
   { name: 'Сальник коленвала',   price:  6500, img: 'https://avatars.mds.yandex.net/get-mpic/4948493/2a0000018b0052a4318366c96a3dedb55ae7/orig' },
-  { name: 'Цилиндр тормозной',  price: 11000, img: 'https://images.nizhparts.ru/images/catalog/50009404.jpg?1637301464' },
+  { name: 'Цилиндр тормозной',  price: 11000, img: 'https://images.nizhparts.ru/images/catalog/50009404.jpg' },
   { name: 'Рычаг подвески',      price:  7500, img: 'https://avatars.mds.yandex.net/i?id=3ccb36190295e26499eb8fc58470a9dd_l-4076581-images-thumbs&n=13' },
   { name: 'Топливный насос',     price: 13500, img: 'https://main-cdn.sbermegamarket.ru/big1/hlr-system/1748262/100023811791b0.jpg' },
   { name: 'Пружина подвески',    price:  6000, img: 'https://avatars.mds.yandex.net/i?id=91b1e0c984f2fdb204f3df345a9f124dd0b51bdd-3826599-images-thumbs&n=13' },
@@ -26,54 +25,55 @@ const products = [
   { name: 'Лямбда-зонд',         price:  8900, img: 'https://avatars.mds.yandex.net/get-mpic/14331733/2a00000198249a09baa7398efa1b870dd53b/orig' }
 ];
 
-/* ========== STATE ========== */
-let cart    = [];
-let current = null;
+var cart = [];
+var current = null;
 
-/* ========== PAGES ========== */
+/* ===== СТРАНИЦЫ ===== */
 function showPage(page) {
-  ['home', 'catalog', 'contacts'].forEach(id => {
-    document.getElementById(id).classList.add('hidden');
-  });
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('catalog').classList.add('hidden');
+  document.getElementById('contacts').classList.add('hidden');
   document.getElementById(page).classList.remove('hidden');
-  document.getElementById('homeHeader').style.display = (page === 'home') ? 'flex' : 'none';
+  var hdr = document.getElementById('homeHeader');
+  hdr.style.display = (page === 'home') ? 'flex' : 'none';
   if (page === 'catalog') renderProducts();
   closeCart();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo(0, 0);
 }
 
-/* ========== PRODUCTS ========== */
+/* ===== ТОВАРЫ ===== */
 function renderProducts() {
-  const box      = document.getElementById('products');
-  const query    = document.getElementById('search').value.toLowerCase();
-  const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
-
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(query) && p.price <= maxPrice
-  );
-
-  if (filtered.length === 0) {
-    box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;padding:40px">Товары не найдены</p>';
-    return;
+  var box = document.getElementById('products');
+  var query = document.getElementById('search').value.toLowerCase();
+  var maxVal = document.getElementById('maxPrice').value;
+  var maxPrice = maxVal ? parseFloat(maxVal) : Infinity;
+  var html = '';
+  var count = 0;
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i];
+    if (p.name.toLowerCase().indexOf(query) !== -1 && p.price <= maxPrice) {
+      html += '<div class="card">'
+        + '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" onerror="this.style.display=\'none\'">'
+        + '<h3>' + p.name + '</h3>'
+        + '<p class="price">' + p.price.toLocaleString('ru-RU') + ' ₸</p>'
+        + '<button onclick="openModal(' + i + ')">Купить</button>'
+        + '</div>';
+      count++;
+    }
   }
-
-  box.innerHTML = filtered.map(p => `
-    <div class="card">
-      <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='img/no-image.png'">
-      <h3>${p.name}</h3>
-      <p class="price">${p.price.toLocaleString('ru-RU')} ₸</p>
-      <button onclick="openModal(${products.indexOf(p)})">Купить</button>
-    </div>
-  `).join('');
+  if (count === 0) {
+    html = '<p style="text-align:center;color:#888;padding:40px;grid-column:1/-1">Товары не найдены</p>';
+  }
+  box.innerHTML = html;
 }
 
-/* ========== MODAL ========== */
+/* ===== МОДАЛКА ===== */
 function openModal(idx) {
   current = idx;
-  const p = products[idx];
-  document.getElementById('modalTitle').textContent = p.name;
-  document.getElementById('modalPrice').textContent = p.price.toLocaleString('ru-RU') + ' ₸';
+  var p = products[idx];
   document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalTitle').innerText = p.name;
+  document.getElementById('modalPrice').innerText = p.price.toLocaleString('ru-RU') + ' ₸';
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -84,14 +84,14 @@ function closeModal() {
   current = null;
 }
 
-/* ========== CART ========== */
+/* ===== КОРЗИНА ===== */
 function addToCart() {
   if (current === null) return;
-  const item = products[current];
-  cart.push({ ...item });
+  var item = products[current];
+  cart.push({ name: item.name, price: item.price });
   renderCart();
   closeModal();
-  showToast(`✅ «${item.name}» добавлен в корзину`);
+  showToast('✅ ' + item.name + ' добавлен в корзину');
 }
 
 function removeFromCart(idx) {
@@ -100,34 +100,34 @@ function removeFromCart(idx) {
 }
 
 function renderCart() {
-  const itemsEl = document.getElementById('cartItems');
-  const totalEl = document.getElementById('cartTotal');
-  const countEl = document.getElementById('cartCount');
-
-  countEl.style.display = cart.length ? 'inline' : 'none';
-  countEl.textContent   = cart.length;
-
+  var itemsEl = document.getElementById('cartItems');
+  var totalEl = document.getElementById('cartTotal');
+  var countEl = document.getElementById('cartCount');
   if (cart.length === 0) {
-    itemsEl.innerHTML   = '<p class="cart-empty">🛒 Корзина пуста</p>';
-    totalEl.textContent = '';
+    countEl.style.display = 'none';
+    itemsEl.innerHTML = '<p class="cart-empty">🛒 Корзина пуста</p>';
+    totalEl.innerText = '';
     return;
   }
-
-  itemsEl.innerHTML = cart.map((c, i) => `
-    <div class="cart-item">
-      <span class="cart-item-name">${c.name}</span>
-      <span class="cart-item-price">${c.price.toLocaleString('ru-RU')} ₸</span>
-      <button class="cart-item-remove" onclick="removeFromCart(${i})" title="Удалить">×</button>
-    </div>
-  `).join('');
-
-  const total = cart.reduce((sum, c) => sum + c.price, 0);
-  totalEl.textContent = 'Итого: ' + total.toLocaleString('ru-RU') + ' ₸';
+  countEl.style.display = 'inline';
+  countEl.innerText = cart.length;
+  var html = '';
+  var total = 0;
+  for (var i = 0; i < cart.length; i++) {
+    total += cart[i].price;
+    html += '<div class="cart-item">'
+      + '<span class="cart-item-name">' + cart[i].name + '</span>'
+      + '<span class="cart-item-price">' + cart[i].price.toLocaleString('ru-RU') + ' ₸</span>'
+      + '<button class="cart-item-remove" onclick="removeFromCart(' + i + ')">×</button>'
+      + '</div>';
+  }
+  itemsEl.innerHTML = html;
+  totalEl.innerText = 'Итого: ' + total.toLocaleString('ru-RU') + ' ₸';
 }
 
 function toggleCart() {
-  const cartEl    = document.getElementById('cart');
-  const overlayEl = document.getElementById('cartOverlay');
+  var cartEl = document.getElementById('cart');
+  var overlayEl = document.getElementById('cartOverlay');
   if (cartEl.classList.contains('open')) {
     closeCart();
   } else {
@@ -143,76 +143,51 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
-/* ========== WHATSAPP & PAY ========== */
+/* ===== WHATSAPP ===== */
 function orderWhatsApp() {
-  if (cart.length === 0) {
-    showToast('⚠️ Корзина пуста');
-    return;
+  if (cart.length === 0) { showToast('⚠️ Корзина пуста'); return; }
+  var text = '';
+  var total = 0;
+  for (var i = 0; i < cart.length; i++) {
+    text += cart[i].name + ' — ' + cart[i].price.toLocaleString('ru-RU') + ' ₸%0A';
+    total += cart[i].price;
   }
-  const text  = cart.map(c => `${c.name} — ${c.price.toLocaleString('ru-RU')} ₸`).join('%0A');
-  const total = cart.reduce((s, c) => s + c.price, 0);
-  window.open(`https://wa.me/77771234567?text=Заказ:%0A${text}%0A%0AИтого: ${total.toLocaleString('ru-RU')} ₸`);
+  text += '%0AИтого: ' + total.toLocaleString('ru-RU') + ' ₸';
+  window.open('https://wa.me/77771234567?text=Заказ:%0A' + text);
 }
 
 function payOnline() {
   alert('Онлайн-оплата подключается через Kaspi / Stripe (нужен сервер)');
 }
 
-/* ========== TOAST ========== */
-let toastTimer;
+/* ===== TOAST ===== */
+var toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+  var t = document.getElementById('toast');
+  t.innerText = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
-/* ========== INIT ========== */
-document.addEventListener('DOMContentLoaded', () => {
+/* ===== INIT ===== */
+window.onload = function() {
+  renderCart();
 
-  // Закрытие модалки по тапу на фон
   document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
-  // Закрытие корзины по тапу на оверлей
-  document.getElementById('cartOverlay').addEventListener('click', closeCart);
+  document.getElementById('cartOverlay').addEventListener('click', function() {
+    closeCart();
+  });
 
-  // Свайп вниз для закрытия корзины
-  const cartEl = document.getElementById('cart');
-  let startY   = 0;
-  let isDragging = false;
-
+  var cartEl = document.getElementById('cart');
+  var startY = 0;
   cartEl.addEventListener('touchstart', function(e) {
-    startY     = e.touches[0].clientY;
-    isDragging = true;
+    startY = e.touches[0].clientY;
   }, { passive: true });
-
-  cartEl.addEventListener('touchmove', function(e) {
-    if (!isDragging) return;
-    const delta = e.touches[0].clientY - startY;
-    if (delta > 0) {
-      cartEl.style.transform = `translateY(${delta}px)`;
-    }
-  }, { passive: true });
-
   cartEl.addEventListener('touchend', function(e) {
-    if (!isDragging) return;
-    isDragging = false;
-    const delta = e.changedTouches[0].clientY - startY;
-    if (delta > 100) {
-      // Свайп вниз больше 100px — закрываем
-      cartEl.style.transform = '';
-      closeCart();
-    } else {
-      // Возвращаем на место
-      cartEl.style.transform = '';
-    }
+    if (e.changedTouches[0].clientY - startY > 80) closeCart();
   }, { passive: true });
-
-  // Начальный рендер корзины
-  renderCart();
-});
-
-
+};
