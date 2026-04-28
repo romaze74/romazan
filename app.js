@@ -1,4 +1,4 @@
-js/app.js
+
 
 var products = [
   { name: 'Тормозные колодки',   price: 15000, img: 'https://avatars.mds.yandex.net/i?id=8231ec4fb7db0111866acc53dc9098209c22ca5f-9271150-images-thumbs&n=13' },
